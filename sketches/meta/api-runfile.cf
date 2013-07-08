@@ -55,6 +55,31 @@ bundle agent cfsketch_run
       # list 'pkgs_add' from definition f3bb8369f3a50cefe5e71c701e3db738, activation __7zip_installation_001_Packages_installed_installed
       "__7zip_installation_001_Packages_installed_installed_pkgs_add" slist => { "p7zip-full" };
 
+      # array 'metadata' from definition sketch metadata, activation __medit_installation_002_Packages_installed_installed
+      "__medit_installation_002_Packages_installed_installed_metadata[activation][identifier]" string => "medit installation";
+      "__medit_installation_002_Packages_installed_installed_metadata[activation][timestamp]" string => "1373285511";
+      "__medit_installation_002_Packages_installed_installed_metadata[api][][type]" string => "bundle_options";
+      "__medit_installation_002_Packages_installed_installed_metadata[api][metadata][type]" string => "metadata";
+      "__medit_installation_002_Packages_installed_installed_metadata[api][pkgs_add][type]" string => "list";
+      "__medit_installation_002_Packages_installed_installed_metadata[api][runenv][type]" string => "environment";
+      "__medit_installation_002_Packages_installed_installed_metadata[authors]" slist => { "Eystein Stenberg <eystein.maloy.stenberg@cfengine.com>" };
+      "__medit_installation_002_Packages_installed_installed_metadata[bundle_options][single_use]" string => "1";
+      "__medit_installation_002_Packages_installed_installed_metadata[depends]" slist => { "CFEngine::dclib", "CFEngine::stdlib" };
+      "__medit_installation_002_Packages_installed_installed_metadata[license]" string => "MIT";
+      "__medit_installation_002_Packages_installed_installed_metadata[location]" string => "sketches/package_management/packages_installed";
+      "__medit_installation_002_Packages_installed_installed_metadata[manifest]" slist => { "README.md", "main.cf", "params/demo.json", "test.cf", "test.pl" };
+      "__medit_installation_002_Packages_installed_installed_metadata[manifest_cf]" slist => { "main.cf", "test.cf" };
+      "__medit_installation_002_Packages_installed_installed_metadata[manifest_docs]" slist => { "README.md" };
+      "__medit_installation_002_Packages_installed_installed_metadata[manifest_exe]" slist => { "cf_null" };
+      "__medit_installation_002_Packages_installed_installed_metadata[manifest_extra]" slist => { "params/demo.json" };
+      "__medit_installation_002_Packages_installed_installed_metadata[manifest_test]" slist => { "test.pl" };
+      "__medit_installation_002_Packages_installed_installed_metadata[name]" string => "Packages::installed";
+      "__medit_installation_002_Packages_installed_installed_metadata[tags]" slist => { "cfdc", "packages", "enterprise_compatible" };
+      "__medit_installation_002_Packages_installed_installed_metadata[version]" string => "1.0.0";
+
+      # list 'pkgs_add' from definition 12db7e97e5ebbf7367dc3909b35f011b, activation __medit_installation_002_Packages_installed_installed
+      "__medit_installation_002_Packages_installed_installed_pkgs_add" slist => { "medit" };
+
   methods:
     any::
       "cfsketch_g" usebundle => "cfsketch_g";
@@ -62,8 +87,11 @@ bundle agent cfsketch_run
 
     runenv_092b04a40fdd4cb8bfdb685f2c4a0328_activated::
       "__7zip_installation_001_Packages_installed_installed" usebundle => cfdc_packages:installed("092b04a40fdd4cb8bfdb685f2c4a0328", "default:cfsketch_run.__7zip_installation_001_Packages_installed_installed_metadata", @(cfsketch_run.__7zip_installation_001_Packages_installed_installed_pkgs_add)), ifvarclass => "(centos|debian|redhat|ubuntu)", useresult => "return___7zip_installation_001_Packages_installed_installed";
+    runenv_092b04a40fdd4cb8bfdb685f2c4a0328_activated::
+      "__medit_installation_002_Packages_installed_installed" usebundle => cfdc_packages:installed("092b04a40fdd4cb8bfdb685f2c4a0328", "default:cfsketch_run.__medit_installation_002_Packages_installed_installed_metadata", @(cfsketch_run.__medit_installation_002_Packages_installed_installed_pkgs_add)), ifvarclass => "(centos|debian|redhat|ubuntu)", useresult => "return___medit_installation_002_Packages_installed_installed";
 
   reports:
     inform_mode::
       "activation __7zip_installation_001_Packages_installed_installed could not run because it requires classes (centos|debian|redhat|ubuntu)" ifvarclass => "inform_mode.!((centos|debian|redhat|ubuntu))";
+      "activation __medit_installation_002_Packages_installed_installed could not run because it requires classes (centos|debian|redhat|ubuntu)" ifvarclass => "inform_mode.!((centos|debian|redhat|ubuntu))";
 }
