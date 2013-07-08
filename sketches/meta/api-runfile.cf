@@ -2,6 +2,20 @@
 
 # environment common bundles
 
+# environment 092b04a40fdd4cb8bfdb685f2c4a0328
+bundle common 092b04a40fdd4cb8bfdb685f2c4a0328
+{
+  vars:
+      "activated" string => "--'activated' value passed as a class function--";
+      "env_vars" slist => { "activated", "test", "verbose" };
+      "test" string => "";
+      "verbose" string => "";
+  classes:
+      "runenv_092b04a40fdd4cb8bfdb685f2c4a0328_activated" and => { classmatch("cfengine_3") };
+      "runenv_092b04a40fdd4cb8bfdb685f2c4a0328_test" expression => "!any";
+      "runenv_092b04a40fdd4cb8bfdb685f2c4a0328_verbose" expression => "!any";
+}
+
 
 # activation data
 bundle common cfsketch_g
@@ -9,21 +23,47 @@ bundle common cfsketch_g
   vars:
       # Files that need to be loaded for the activated sketches and
       # their dependencies.
-      "inputs" slist => { "cf_null" };
+      "inputs" slist => { "sketches/libraries/dclib/library.cf", "sketches/package_management/packages_installed/main.cf" };
 }
 
 bundle agent cfsketch_run
 {
   vars:
 
+      # array 'metadata' from definition sketch metadata, activation __7zip_installation_001_Packages_installed_installed
+      "__7zip_installation_001_Packages_installed_installed_metadata[activation][identifier]" string => "7zip installation";
+      "__7zip_installation_001_Packages_installed_installed_metadata[activation][timestamp]" string => "1373284142";
+      "__7zip_installation_001_Packages_installed_installed_metadata[api][][type]" string => "bundle_options";
+      "__7zip_installation_001_Packages_installed_installed_metadata[api][metadata][type]" string => "metadata";
+      "__7zip_installation_001_Packages_installed_installed_metadata[api][pkgs_add][type]" string => "list";
+      "__7zip_installation_001_Packages_installed_installed_metadata[api][runenv][type]" string => "environment";
+      "__7zip_installation_001_Packages_installed_installed_metadata[authors]" slist => { "Eystein Stenberg <eystein.maloy.stenberg@cfengine.com>" };
+      "__7zip_installation_001_Packages_installed_installed_metadata[bundle_options][single_use]" string => "1";
+      "__7zip_installation_001_Packages_installed_installed_metadata[depends]" slist => { "CFEngine::dclib", "CFEngine::stdlib" };
+      "__7zip_installation_001_Packages_installed_installed_metadata[license]" string => "MIT";
+      "__7zip_installation_001_Packages_installed_installed_metadata[location]" string => "sketches/package_management/packages_installed";
+      "__7zip_installation_001_Packages_installed_installed_metadata[manifest]" slist => { "README.md", "main.cf", "params/demo.json", "test.cf", "test.pl" };
+      "__7zip_installation_001_Packages_installed_installed_metadata[manifest_cf]" slist => { "main.cf", "test.cf" };
+      "__7zip_installation_001_Packages_installed_installed_metadata[manifest_docs]" slist => { "README.md" };
+      "__7zip_installation_001_Packages_installed_installed_metadata[manifest_exe]" slist => { "cf_null" };
+      "__7zip_installation_001_Packages_installed_installed_metadata[manifest_extra]" slist => { "params/demo.json" };
+      "__7zip_installation_001_Packages_installed_installed_metadata[manifest_test]" slist => { "test.pl" };
+      "__7zip_installation_001_Packages_installed_installed_metadata[name]" string => "Packages::installed";
+      "__7zip_installation_001_Packages_installed_installed_metadata[tags]" slist => { "cfdc", "packages", "enterprise_compatible" };
+      "__7zip_installation_001_Packages_installed_installed_metadata[version]" string => "1.0.0";
 
+      # list 'pkgs_add' from definition f3bb8369f3a50cefe5e71c701e3db738, activation __7zip_installation_001_Packages_installed_installed
+      "__7zip_installation_001_Packages_installed_installed_pkgs_add" slist => { "p7zip-full" };
 
   methods:
     any::
       "cfsketch_g" usebundle => "cfsketch_g";
+      "092b04a40fdd4cb8bfdb685f2c4a0328" usebundle => "092b04a40fdd4cb8bfdb685f2c4a0328";
 
-
+    runenv_092b04a40fdd4cb8bfdb685f2c4a0328_activated::
+      "__7zip_installation_001_Packages_installed_installed" usebundle => cfdc_packages:installed("092b04a40fdd4cb8bfdb685f2c4a0328", "default:cfsketch_run.__7zip_installation_001_Packages_installed_installed_metadata", @(cfsketch_run.__7zip_installation_001_Packages_installed_installed_pkgs_add)), ifvarclass => "(centos|debian|redhat|ubuntu)", useresult => "return___7zip_installation_001_Packages_installed_installed";
 
   reports:
-    cfengine::
+    inform_mode::
+      "activation __7zip_installation_001_Packages_installed_installed could not run because it requires classes (centos|debian|redhat|ubuntu)" ifvarclass => "inform_mode.!((centos|debian|redhat|ubuntu))";
 }
